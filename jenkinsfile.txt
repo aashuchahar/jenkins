@@ -1,0 +1,71 @@
+pipeline {
+	agent any
+	stages {
+	
+	stage('Checkout Source Code'){
+	steps {
+		chekout scm
+	}
+	}
+	
+	stage ('Deploy to testing server'){
+	steps{
+		sh '''
+		echo "Installing APache"
+		sudo yum install httpd -y
+		
+		sudo mkdir -p /var/www/html 
+		
+		sudo cp index.html /var/www/html/
+		
+		sudo systemctl stop firewalld
+		'''
+	
+	}
+	}
+	stage ('Technical Team Approval'){
+	steps {
+		input (
+		message: 'Technical Team is Testing Sucessfully ? '
+		ok: 'Approve Deployment'		
+		)
+	}
+	}
+	stage ("Deploy to Production"){
+	steps
+	steps{
+		sh '''
+		echo "Installing APache"
+		sudo yum install httpd -y
+		
+		sudo mkdir -p /var/www/html 
+		
+		sudo cp index.html /var/www/html/
+		
+		sudo systemctl start httpd 
+		
+		sudo systemctl stop firewalld
+		'''
+	
+	}
+	}
+	
+	stage ('Manager Approval'){
+	steps{
+	input (
+		message: 'Manager Approve Production Release ?'
+		ok: 'Release'
+	
+	)
+	
+	
+	}
+	
+	}
+
+
+
+
+
+
+}
