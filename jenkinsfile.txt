@@ -54,7 +54,7 @@ pipeline {
 	post {	
 	success {
 		emailtext(
-		to: 'intern.linuxworld@gmail.com',
+		to: 'aashuchahar9@gmail.com',
 		subject: 'Prodcution Deployment Sucessfully Done',
 		body: '''
 		Hello Team 
